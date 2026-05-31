@@ -6,36 +6,83 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function App() {
   const [products, setProducts] = useState([]);
-  const [status, setStatus] = useState("Loading products...");
+  const [status, setStatus] = useState("Please log in.");
+  const [token, setToken] = useState(null);
+  const [username, setUsername] = useState("pedro01");
+  const [password, setPassword] = useState("Test123!");
+
+  const login = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await axios.post(`${API_BASE_URL}/login`, {
+        username,
+        password,
+      });
+
+      setToken(response.data.token);
+      setStatus(`Logged in as ${response.data.user.username}`);
+    } catch (error) {
+      console.error(error);
+      setToken(null);
+      setStatus("Login failed");
+    }
+  };
 
   useEffect(() => {
+    if (!token) return;
+
     axios
       .get(`${API_BASE_URL}/products`)
       .then((response) => {
         setProducts(response.data);
-        setStatus("Products loaded successfully");
       })
       .catch((error) => {
         console.error(error);
         setStatus("Failed to load products");
       });
-  }, []);
+  }, [token]);
 
   return (
     <main>
       <h1>QA Lab Store</h1>
       <p>{status}</p>
 
-      <section>
-        <h2>Products</h2>
+      {!token && (
+        <form onSubmit={login}>
+          <label>
+            Username
+            <input
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+            />
+          </label>
 
-        {products.map((product) => (
-          <article key={product.id}>
-            <h3>{product.name}</h3>
-            <p>${product.price}</p>
-          </article>
-        ))}
-      </section>
+          <label>
+            Password
+            <input
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </label>
+
+          <button type="submit">Login</button>
+        </form>
+      )}
+
+      {token && (
+        <section>
+          <h2>Products</h2>
+
+          {products.map((product) => (
+            <article key={product.id}>
+              <h3>{product.name}</h3>
+              <p>${product.price}</p>
+            </article>
+          ))}
+        </section>
+      )}
     </main>
   );
 }

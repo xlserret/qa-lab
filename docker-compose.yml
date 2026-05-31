@@ -12,7 +12,7 @@ services:
     build:
       context: ./frontend-app
     ports:
-      - "5137:5137"
+      - "5173:5173"
     volumes:
       - ./frontend-app:/app
       - /app/node_modules
