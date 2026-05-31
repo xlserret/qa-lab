@@ -1,0 +1,22 @@
+services:
+  backend-api:
+    build:
+      context: ./backend-api
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend-api:/app
+    environment:
+      - PORT=3001
+  frontend-app:
+    build:
+      context: ./frontend-app
+    ports:
+      - "5137:5137"
+    volumes:
+      - ./frontend-app:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_BASE_URL=http://localhost:3001
+    depends_on:
+      - backend-api

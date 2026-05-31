@@ -1,0 +1,29 @@
+$kind: http-request
+name: Login Failure
+url: "{{baseUrl}}/login"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "username": "pedro01",
+        "password": "Test123"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 401", function () {
+        pm.response.to.have.status(401);
+      });
+
+      pm.test("Login failed", function () {
+        const response = pm.response.json();
+        pm.expect(response.success).to.eql(false);
+      });
+
+      pm.test("Error message is returned", function () {
+        const response = pm.response.json();
+        pm.expect(response.message).to.eql("Invalid credentials");
+      });
+    language: text/javascript
+order: 3647519671556840

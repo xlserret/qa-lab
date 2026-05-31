@@ -23,6 +23,29 @@ app.get("/products", (req, res) => {
   ]);
 });
 
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  if (
+    username === "pedro01" && 
+    password === "Test123!"
+  ) 
+    return res.json({
+        success: true,
+        token: "fake-jwt-token-123",
+        user: {
+            id: 1,
+            username: "pedro01",
+            role: "qa-engineer",
+        },
+    })
+  else {
+    res.status(401).json({
+        success: false, 
+        message: "Invalid credentials",
+    })
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`QA Lab Backend running on port ${PORT}`);
 });

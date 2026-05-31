@@ -1,0 +1,37 @@
+$kind: http-request
+name: Login Success
+url: "{{baseUrl}}/login"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "username": "pedro01",
+        "password": "Test123!"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Login was succesful", function () {
+          const response = pm.response.json();
+          pm.expect(response.success).to.be.true;
+          pm.expect(response.success).to.eql(true);
+      });
+
+      pm.test("Token is returned", function () {
+          const response = pm.response.json();
+          pm.expect(response.token).to.not.be.null;
+          pm.expect(response.token).to.not.eql("");
+          pm.expect(response.token).to.eql("fake-jwt-token-123")
+      });
+
+      pm.test("User role is qa-engineer", function () {
+          const response = pm.response.json();
+          pm.expect(response.user.role).to.eql("qa-engineer");
+      });
+    language: text/javascript
+order: 3143111126796089
