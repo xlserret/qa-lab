@@ -25,7 +25,7 @@ function App() {
     } catch (error) {
       console.error(error);
       setToken(null);
-      setStatus("Login failed");
+      setStatus("Login failed.");
     }
   };
 
@@ -39,7 +39,7 @@ function App() {
       })
       .catch((error) => {
         console.error(error);
-        setStatus("Failed to load products");
+        setStatus("Failed to load products.");
       });
   }, [token]);
 
