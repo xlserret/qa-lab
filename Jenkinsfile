@@ -15,7 +15,7 @@ pipeline {
         }
     }
 
-    port {
+    post {
         always {
             archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
         }
