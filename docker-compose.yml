@@ -20,3 +20,16 @@ services:
       - VITE_API_BASE_URL=http://localhost:3001
     depends_on:
       - backend-api
+  jenkins:
+    image: jenkins/jenkins:lts
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    depends_on:
+      - backend-api
+      - frontend-app
+
+volumes:
+  jenkins_home:
