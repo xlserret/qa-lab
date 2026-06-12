@@ -37,6 +37,7 @@ pipeline {
     post {
         always {
             archiveArtifacts artifacts: 'automation/playwright/playwright-report/**', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'automation/playwright/test-results/**', allowEmptyArchive: true
         }
     }
 }
