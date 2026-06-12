@@ -9,4 +9,6 @@ RUN apt-get update && \
     node -v && \
     npm -v
 
+RUN npx playwright install --with-deps
+
 USER jenkins
