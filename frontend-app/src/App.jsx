@@ -8,8 +8,8 @@ function App() {
   const [products, setProducts] = useState([]);
   const [status, setStatus] = useState("Please log in.");
   const [token, setToken] = useState(null);
-  const [username, setUsername] = useState("pedro01");
-  const [password, setPassword] = useState("Test123!");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const login = async (event) => {
     event.preventDefault();
