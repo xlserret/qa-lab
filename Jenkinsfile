@@ -11,26 +11,32 @@ pipeline {
 
         stage('Install dependencies') {
             steps {
-                sh 'npm ci'
+                dir ('automation/playwright') {
+                    sh 'npm ci'
+                }
             }
         }
 
         stage('Install Playwright browsers') {
             steps {
-                sh 'npx playwright install'
+                dir ('automation/playwright') {
+                    sh 'npx playwright install'
+                }
             }
         }
 
         stage('Run Playwright tests') {
             steps {
-                sh 'npx playwright test'
+                dir ('automation/playwright') {
+                    sh 'npx playwright test'
+                }
             }
         }
     }
 
     post {
         always {
-            archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'automation/playwright/playwright-report/**', allowEmptyArchive: true
         }
     }
 }
