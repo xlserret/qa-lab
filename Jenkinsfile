@@ -28,7 +28,7 @@ pipeline {
         stage('Run Playwright tests') {
             steps {
                 dir ('automation/playwright') {
-                    sh 'npx playwright test'
+                    sh 'BASE_URL=http://frontend-app:5173 npx playwright test'
                 }
             }
         }
