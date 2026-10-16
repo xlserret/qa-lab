@@ -9,6 +9,7 @@ export const config: WebdriverIO.Config = {
     // ====================
     // WebdriverIO supports running e2e tests as well as unit and component tests.
     runner: 'local',
+    autoXvfb: false,
     tsConfigPath: './tsconfig.json',
     
     hostname: process.env.APPIUM_HOST || '127.0.0.1',
