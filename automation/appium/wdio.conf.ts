@@ -1,3 +1,5 @@
+import { mkdir, writeFile } from 'node:fs/promises';
+import { browser } from '@wdio/globals';
 import path from 'path';
 export const config: WebdriverIO.Config = {
     
@@ -9,6 +11,8 @@ export const config: WebdriverIO.Config = {
     runner: 'local',
     tsConfigPath: './tsconfig.json',
     
+    hostname: process.env.APPIUM_HOST || '127.0.0.1',
+    path: '/',
     port: 4723,
     //
     // ==================
@@ -55,10 +59,11 @@ export const config: WebdriverIO.Config = {
     // https://saucelabs.com/platform/platform-configurator
     //
     capabilities: [{
-        // capabilities for local Appium web tests on an Android Emulator
+        // Native Android app capabilities; the emulator must already be running.
         platformName: 'Android',
         'appium:automationName': 'UiAutomator2',
         'appium:deviceName': 'Android Emulator',
+        ...(process.env.ANDROID_UDID ? { 'appium:udid': process.env.ANDROID_UDID } : {}),
         'appium:app': process.env.ANDROID_APP_PATH || path.resolve('./apks/Android-MyDemoAppRN.1.3.0.build-244.apk'),
         'appium:autoGrantPermissions': true,
         'appium:noReset': false
@@ -71,7 +76,7 @@ export const config: WebdriverIO.Config = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
-    logLevel: 'info',
+    logLevel: 'warn',
     //
     // Set specific log levels per logger
     // loggers:
@@ -111,7 +116,7 @@ export const config: WebdriverIO.Config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['appium'],
+    services: process.env.APPIUM_HOST ? ['appium'] : [],
 
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -237,8 +242,14 @@ export const config: WebdriverIO.Config = {
      * @param {boolean} result.passed    true if test has passed, otherwise false
      * @param {object}  result.retries   information about spec related retries, e.g. `{ attempts: 0, limit: 0 }`
      */
-    // afterTest: function(test, context, { error, result, duration, passed, retries }) {
-    // },
+    afterTest: async function(test, _context, { passed }) {
+        if (passed) return;
+        const folder = path.resolve('test-results');
+        await mkdir(folder, { recursive: true });
+        const name = `${Date.now()}-${test.title.replace(/[^a-z0-9]+/gi, '-')}`;
+        await browser.saveScreenshot(path.join(folder, `${name}.png`));
+        await writeFile(path.join(folder, `${name}.xml`), await browser.getPageSource());
+    },
 
 
     /**
