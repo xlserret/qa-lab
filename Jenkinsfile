@@ -34,12 +34,12 @@ pipeline {
             }
         }
         */
-        
+
         stage('Run Appium tests') {
             environment {
                 APPIUM_HOST = 'host.docker.internal'
                 ANDROID_UDID = 'emulator-5554'
-                ANDROID_APP_PATH = 'Users/xavier/Development/qa-lab/automation/appium/apks/Android-MyDemoAppRN.1.3.0.build-244.apk'
+                ANDROID_APP_PATH = '/Users/xavier/Development/qa-lab/automation/appium/apks/Android-MyDemoAppRN.1.3.0.build-244.apk'
             }
             steps {
                 dir ('automation/appium') {
