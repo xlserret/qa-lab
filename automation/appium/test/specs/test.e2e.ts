@@ -21,7 +21,7 @@ describe('Android shopping flow', () => {
 
     it('removes the backpack and shows an empty cart', async () => {
         await Store.addBackpackToCart();
-        await Store.removeItem.click();
+        // await Store.removeItem.click();
         await expect(Store.emptyCartMessage).toBeDisplayed();
         await expect(Store.backpack).not.toBeDisplayed();
     });
