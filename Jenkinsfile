@@ -9,7 +9,6 @@ pipeline {
             }
         }
 
-        /*
         stage('Install dependencies') {
             steps {
                 dir ('automation/playwright') {
@@ -33,7 +32,6 @@ pipeline {
                 }
             }
         }
-        */
 
         stage('Run Appium tests') {
             environment {
