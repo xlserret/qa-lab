@@ -52,6 +52,7 @@ pipeline {
 
     post {
         always {
+            junit testResults: 'automation/appium/test-results/junit/*.xml'
             archiveArtifacts artifacts: 'automation/playwright/playwright-report/**', allowEmptyArchive: true
             archiveArtifacts artifacts: 'automation/playwright/test-results/**', allowEmptyArchive: true
             archiveArtifacts artifacts: 'automation/appium/test-results/**', allowEmptyArchive: true
